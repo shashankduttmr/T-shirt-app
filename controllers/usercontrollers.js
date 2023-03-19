@@ -4,7 +4,7 @@ const cookieToken = require('../utils/cookietoken')
 const cloudinary = require('cloudinary').v2
 const mailHelper = require('../utils/emailhelper')
 const crypto = require('crypto')
-const { isLoggedin } = require('../middlewares/isloggedin')
+
 
 exports.signUp = async function (req, res, next) {
     try {
@@ -55,12 +55,10 @@ exports.UserLogin = async function (req, res, next) {
     try {
         //checking user//
         const { email, password } = req.body
-        console.log(req.body);
         if (!(email && password)) {
             return next(new AppError('All fields are mendatory', 404))
         }
         const user = await User.findOne({ email: email })
-        console.log(user);
         if (!user) {
             return next(new AppError('User is not registered yet', 404))
         }
@@ -72,7 +70,6 @@ exports.UserLogin = async function (req, res, next) {
 
         return cookieToken(user, res)
     } catch (error) {
-        console.log(error);
         next(new AppError('Failed to login', 500))
     }
 }
@@ -136,7 +133,7 @@ exports.passwordReset = async function (req, res, next) {
     try {
         //grabing the token
         const { token } = req.params
-        console.log(token);
+        
 
         //check token present or not
         if (!token) {
@@ -264,7 +261,86 @@ exports.UpdateDetails = async function(req, res, next){
             updated:true
         })
     } catch (error) {
-        console.log(error);
         return next(new AppError('Failed to update the record', 500))
+    }
+}
+
+exports.adminAllUser = async function(req, res, next){
+    try {
+        const users = await User.find({})
+        console.log(users);
+        res.status(200).json({
+            success:true,
+            users
+        })
+    } catch (error) {
+        
+    }
+}
+
+exports.managerAllUser = async function(req, res,next){
+    try {
+        const user = await User.find({role:'user'})
+        if(!user)return next(new AppError('Failed to retrive data from database', 400))
+        
+    } catch (error) {
+        
+    }
+}
+
+exports.adminOneUser = async function(req, res, next){
+    const {id} = req.params
+    if(!id)return next(new AppError('Failed to fetch ID', 404))
+
+    const user = await User.findById(id)
+    if(!user)return next(new AppError('User not found', 404))
+
+    res.status(200).json({
+        success:true, 
+        user
+    })
+}
+
+exports.ModifyOnlyUser = async function(req, res, next){
+    try {
+        const {id} = req.params
+        if(!id) return next(new AppError('Missing token', 404))
+
+        const user = await User.findById(id)
+
+        if(!user) return next(new AppError('User not found'))
+        const details = {
+            name:req.body.name,
+            email:req.body.email,
+            role:req.body.role
+        }
+        await User.findByIdAndUpdate(id, details, {
+            runValidators:true,
+        })
+        res.status(200).json({
+            success:true
+        })
+    } catch (error) {
+        next(new AppError(error, 500))
+    }
+}
+
+exports.DeleteOnlyUser = async function(req, res, next){
+    try {
+        const {id} = req.params
+
+        if(!id)return next(new AppError('Missing Token', 404))
+
+        const user = await User.findById(id)
+
+        if(!user) return next(new AppError('User not found', 404))
+
+        await User.findByIdAndDelete(id)
+
+        return res.status(200).json({
+            isUserDelete: true
+        })
+    } catch (error) {
+        next(new AppError(error, 500))
     }
 }

@@ -10,9 +10,14 @@ const {
     passwordReset, 
     dashboard, 
     changePassword,
-    UpdateDetails
+    UpdateDetails,
+    adminAllUser,
+    managerAllUser,
+    adminOneUser,
+    ModifyOnlyUser,
+    DeleteOnlyUser
 }    = require('../controllers/usercontrollers')
-const {isLoggedin} = require('../middlewares/isloggedin')
+const {isLoggedin,customRole} = require('../middlewares/isloggedin')
 
 
 Router.route('/signup')
@@ -49,6 +54,21 @@ Router.route('/user/dashboard/update')
     .put(isLoggedin, UpdateDetails)
 
 
+// Admin Routes
+
+Router.route('/admin/user')
+    .get(isLoggedin,customRole('Admin') ,adminAllUser)
+
+Router.route('/admin/user/:id')
+    .get(isLoggedin, customRole('Admin'), adminOneUser)
+    .put(isLoggedin, customRole('Admin'), ModifyOnlyUser)
+    .delete(isLoggedin, customRole('Admin'), DeleteOnlyUser)
+
+
+//Manager only routes
+
+Router.route('/manager/user')
+    .get(isLoggedin, customRole('manager'), managerAllUser)
 
 
 module.exports = Router
