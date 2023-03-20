@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const {Schema} = mongoose
 
 const MyOrders = new Schema({
-    shippingaddress:{
+    shippingAddress:{
         type:String,
         required:[true]
     },
