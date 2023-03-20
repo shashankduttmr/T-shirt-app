@@ -61,8 +61,34 @@ const MyOrders = new Schema({
         id:{
             type:String
         }
+    },
+    taxAmount:{
+        type:Number,
+        required:true
+    },
+    shippingAmount:{
+        type:Number,
+        required:true
+    },
+    totalAmount:{
+        type:Number,
+        required:true
+    },
+    orderStatus:{
+        type:String,
+        required:true,
+        default:'processing'
+    },
+    deliveredAt:{
+        type: Date
+    },
+    createdAt:{
+        type:Date,
+        default:Date.now
     }
 })
+
+module.exports = mongoose.model('order', MyOrders)
 
 
 // Shipping Information {},
