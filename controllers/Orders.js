@@ -3,6 +3,8 @@ const Product = require('../models/Product')
 const AppError = require('../error')
 
 exports.createOrder = async function(req, res, next){
+
+    //contrller to create orders 
     try {
         const {id} = req.params
 
