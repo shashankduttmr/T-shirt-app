@@ -33,7 +33,6 @@ const MyOrders = new Schema({
     user:{
         type:Schema.Types.ObjectId,
         ref:'user',
-        required:true
     },
 
     orderItem:[

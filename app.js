@@ -12,6 +12,7 @@ const Home = require('./routes/home')
 const user = require('./routes/user')
 const Product = require('./routes/Product')
 const payment = require('./routes/payment')
+const orders = require('./routes/orders')
 const cookieParser = require('cookie-parser')
 
 cloudinary.config({
@@ -37,6 +38,7 @@ app.use('/', Home)
 app.use('/api/v1', user)
 app.use('/api/v1',Product)
 app.use('/api/v1',payment)
+app.use('/api/v1',orders)
 
 app.post('/test/:token', function(req, res){
     res.send(req.params)
