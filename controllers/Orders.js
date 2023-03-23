@@ -51,7 +51,7 @@ exports.GetOneOrder = async function(req, res, next){
 
         if(!id)return next(new AppError('Please Check your order details', 404))
 
-        const order = await orders.findById(id)
+        const order = await orders.findById(id).populate("user","name email")
 
         if(!order) return next(new AppError('Order not found', 404))
 
@@ -60,6 +60,6 @@ exports.GetOneOrder = async function(req, res, next){
             order
         })
     } catch (error) {
-        
+        next(new AppError(error, 500))
     }
 }
