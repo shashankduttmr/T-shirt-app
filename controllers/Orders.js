@@ -63,3 +63,18 @@ exports.GetOneOrder = async function(req, res, next){
         next(new AppError(error, 500))
     }
 }
+
+//admin controllers
+
+exports.AdminGetAllOrders = async function(req, res, next){
+    try {
+        const AllOrders = await orders.find({})
+
+        if(!AllOrders)return next(new AppError('Orders not found', 404))
+
+        res.status(200).json({success:true,
+        AllOrders})
+    } catch (error) {
+        
+    }
+}
