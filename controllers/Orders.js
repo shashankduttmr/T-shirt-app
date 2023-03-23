@@ -75,6 +75,6 @@ exports.AdminGetAllOrders = async function(req, res, next){
         res.status(200).json({success:true,
         AllOrders})
     } catch (error) {
-        
+        next(new AppError('Orders not found', 500))
     }
 }
