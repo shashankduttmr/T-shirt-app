@@ -44,3 +44,22 @@ exports.createOrder = async function(req, res, next){
         next(new AppError('Failed to place order', 404))
     }
 }
+
+exports.GetOneOrder = async function(req, res, next){
+    try {
+        const {id} = req.params
+
+        if(!id)return next(new AppError('Please Check your order details', 404))
+
+        const order = await orders.findById(id)
+
+        if(!order) return next(new AppError('Order not found', 404))
+
+        res.status(200).json({
+            success:true,
+            order
+        })
+    } catch (error) {
+        
+    }
+}
