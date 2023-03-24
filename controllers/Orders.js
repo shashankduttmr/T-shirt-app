@@ -90,6 +90,6 @@ exports.GetOneOrder = async function(req, res, next){
         })
 
     } catch (error) {
-        next(new AppError(erro, 500))
+        next(new AppError(error, 500))
     }
 }
