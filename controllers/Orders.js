@@ -40,7 +40,6 @@ exports.createOrder = async function(req, res, next){
 
 
     } catch (error) {
-        console.log(error);
         next(new AppError('Failed to place order', 404))
     }
 }
@@ -91,6 +90,6 @@ exports.GetOneOrder = async function(req, res, next){
         })
 
     } catch (error) {
-        
+        next(new AppError(erro, 500))
     }
 }
