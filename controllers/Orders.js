@@ -45,13 +45,9 @@ exports.createOrder = async function(req, res, next){
     }
 }
 
-exports.GetOneOrder = async function(req, res, next){
+exports.GetOneUserOrder = async function(req, res, next){
     try {
-        const {id} = req.params
-
-        if(!id)return next(new AppError('Please Check your order details', 404))
-
-        const order = await orders.findById(id).populate("user","name email")
+        const order = await orders.findOne({user:req.user._id}).populate("user","name email")
 
         if(!order) return next(new AppError('Order not found', 404))
 
@@ -76,5 +72,25 @@ exports.AdminGetAllOrders = async function(req, res, next){
         AllOrders})
     } catch (error) {
         next(new AppError('Orders not found', 500))
+    }
+}
+
+exports.GetOneOrder = async function(req, res, next){
+    try {
+        const {id} = req.params
+
+        if(!id) return next(new AppError('Transaction ID is mussing', 404))
+
+        const order = await orders.findById(id)
+
+        if(!order) return next(new AppError('Order not available', 404))
+
+        res.status(200).json({
+            success:true,
+            order
+        })
+
+    } catch (error) {
+        
     }
 }

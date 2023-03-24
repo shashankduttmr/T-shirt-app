@@ -1,6 +1,6 @@
 const express = require('express')
 const Router = express.Router()
-const {createOrder, GetOneOrder, AdminGetAllOrders} = require('../controllers/Orders')
+const {createOrder, GetOneUserOrder, AdminGetAllOrders, GetOneOrder} = require('../controllers/Orders')
 const {isLoggedin, customRole} = require('../middlewares/isloggedin')
 
 Router.route('/product/:id/create/order')
@@ -18,6 +18,9 @@ Router.route('/order/:id')
     .get(isLoggedin, GetOneOrder)
 
 
+
+Router.route('/myorder')
+    .get(isLoggedin, GetOneUserOrder)
 
 
 
