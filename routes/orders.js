@@ -7,11 +7,8 @@ Router.route('/product/:id/create/order')
     .post(isLoggedin, createOrder)
 
 
-
 Router.route('/admin/orders')
     .get(isLoggedin, customRole('Admin'), AdminGetAllOrders)
-
-
 
 
 Router.route('/order/:id')
