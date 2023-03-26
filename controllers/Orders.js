@@ -93,3 +93,47 @@ exports.GetOneOrder = async function(req, res, next){
         next(new AppError(error, 500))
     }
 }
+
+exports.AdminUpdateOrder = async function(req, res, next){
+    try {
+        const {id} = req.params
+
+        if(!id) return next(new AppError('order id is missing', 404))
+
+        const order = await orders.findById(id)
+
+        if(!order) return next(new AppError('Oders not found', 404))
+
+        if(order.orderStatus === 'Delivered'){
+            return next(new AppError('order is already delivered', 404))
+        }
+
+        order.orderStatus = req.body.orderStatus
+
+        order.orderItem.forEach(async product=>{
+            await updateProductStock(product.product, product.quantity)
+        })
+
+        await order.save()
+
+        res.status(200).json({
+            success:true,
+            order
+        })
+
+    } catch (error) {
+        next(new AppError(error, 500))   
+    }
+}
+
+async function updateProductStock(productID, quantity, next){
+    const product = await Product.findById(productID)
+
+    if(product.stock < quantity){
+        return next(new AppError('quantity is out of bound', 500))
+    }
+
+    product.stock = product.stock - quantity
+
+    await product.save({validateBeforeSave:false})
+}
