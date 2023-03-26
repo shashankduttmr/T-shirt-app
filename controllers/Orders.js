@@ -126,6 +126,22 @@ exports.AdminUpdateOrder = async function(req, res, next){
     }
 }
 
+
+exports.AdminDeleteOrder = async function(req, res, next){
+    const {id} = req.params
+    if(!id) return next(new AppError('failed to process the orders', 404))
+
+    const order = await orders.findById(id)
+
+    if(!order) return next(new AppError('Order not found', 404))
+
+    await order.remove()
+
+    res.status(200).json({
+        success:true
+    })
+}
+
 async function updateProductStock(productID, quantity, next){
     const product = await Product.findById(productID)
 
