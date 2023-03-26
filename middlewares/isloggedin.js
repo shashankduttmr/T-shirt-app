@@ -24,7 +24,7 @@ exports.isLoggedin = async function (req, res, next) {
 }
 
 exports.customRole = (...roles)=>{
-    return(req, res,next)=>{
+    return(req, res, next)=>{
         if(!roles.includes(req.user.role)) return next(new AppError('You are not allowed for this role', 403))
         return next()
     }

@@ -40,9 +40,6 @@ app.use('/api/v1',Product)
 app.use('/api/v1',payment)
 app.use('/api/v1',orders)
 
-app.post('/test/:token', function(req, res){
-    res.send(req.params)
-})
 
 app.use(function(err, req, res, next){
     const {message, status} = err
